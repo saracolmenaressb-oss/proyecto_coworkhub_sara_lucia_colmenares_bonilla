@@ -15,6 +15,7 @@ public class UserAccount {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private Role role;
+
     // 0..1 UserAccount -> 1 Member ("logs in with")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", unique = true)
