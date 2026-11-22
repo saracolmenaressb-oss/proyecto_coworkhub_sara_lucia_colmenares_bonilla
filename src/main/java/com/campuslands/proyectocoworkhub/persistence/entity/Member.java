@@ -26,6 +26,7 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "membershipplan_id", nullable = false)
     private MembershipPlan membershipPlan;
+    
     public Member(String documentNumber, String fullName, String email, MemberStatus status) {
         this.documentNumber = documentNumber;
         this.fullName = fullName;
