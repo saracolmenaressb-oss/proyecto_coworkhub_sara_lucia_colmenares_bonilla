@@ -70,4 +70,16 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             @Param("statuses") Collection<BookingStatus> statuses,
             @Param("minCapacity") Integer minCapacity
     );
+
+    // Verificar si una sede tiene salas asociadas
+    boolean existsByLocation_Id(Long locationId);
+
+    // Verificar si el nombre pertenece a otra sala
+// de la misma sede (excluyendo el ID actual)
+    boolean existsByNameIgnoreCaseAndLocation_IdAndIdNot(
+            String name,
+            Long locationId,
+            Long id
+    );
+
 }

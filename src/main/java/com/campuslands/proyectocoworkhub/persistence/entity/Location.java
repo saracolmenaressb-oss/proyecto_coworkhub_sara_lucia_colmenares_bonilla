@@ -1,6 +1,7 @@
 package com.campuslands.proyectocoworkhub.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -18,9 +19,13 @@ public class Location {
     private String city;
     @Column(nullable = false, length = 50)
     private String address;
+    @NotNull(message = "La hora de apertura es obligatoria")
+    @Column(name = "opening_time", nullable = false)
     private LocalTime openingTime;
+    @NotNull(message = "La hora de cierre es obligatoria")
+    @Column(name = "closing_time", nullable = false)
     private LocalTime closingTime;
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "location")
     private List<Room> rooms = new ArrayList<>();
 
     protected Location() {
@@ -78,5 +83,17 @@ public class Location {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 }
