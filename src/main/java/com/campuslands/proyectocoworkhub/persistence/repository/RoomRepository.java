@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
     // Listar las salas de una sede
     List<Room> findByLocation_Id(Long locationId);
@@ -81,5 +83,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             Long locationId,
             Long id
     );
+    // Comprobar si una sala tiene reservas
+    boolean existsByBookings_Id(Long roomId);
+
 
 }

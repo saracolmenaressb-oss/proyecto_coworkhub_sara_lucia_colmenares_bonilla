@@ -2,6 +2,8 @@ package com.campuslands.proyectocoworkhub.busisness.service;
 
 import com.campuslands.proyectocoworkhub.persistence.entity.Room;
 import com.campuslands.proyectocoworkhub.persistence.entity.RoomType;
+import com.campuslands.proyectocoworkhub.presentation.dto.RoomRequestDTO;
+import com.campuslands.proyectocoworkhub.presentation.dto.RoomResponseDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,32 +12,24 @@ import java.util.Collection;
 import java.util.List;
 
 public interface RoomService {
-    // Registrar una sala
-    Room createRoom(Room room);
 
-    // Buscar una sala por ID
-    Room getRoomById(Long id);
+    RoomResponseDTO createRoom(RoomRequestDTO dto);
 
-    // Listar todas las salas
-    List<Room> getAllRooms();
+    List<RoomResponseDTO> getAllRooms();
 
-    // Listar las salas de una sede
-    List<Room> getRoomsByLocation(Long locationId);
+    RoomResponseDTO getRoomById(Long id);
 
-    // Buscar salas por tipo
-    List<Room> getRoomsByType(RoomType type);
+    List<RoomResponseDTO> getRoomsByLocation(Long locationId);
 
-    // Listar las salas activas de una sede
-    List<Room> getActiveRoomsByLocation(Long locationId);
+    List<RoomResponseDTO> getRoomsByType(RoomType type);
 
-    // Actualizar una sala
-    Room updateRoom(Long id, Room room);
+    List<RoomResponseDTO> getActiveRoomsByLocation(Long locationId);
 
-    // Eliminar una sala
+    RoomResponseDTO updateRoom(Long id, RoomRequestDTO dto);
+
     void deleteRoom(Long id);
 
-    // Buscar salas disponibles según fecha, horario y filtros
-    List<Room> getAvailableRooms(
+    List<RoomResponseDTO> getAvailableRooms(
             Long locationId,
             LocalDate date,
             LocalTime startTime,

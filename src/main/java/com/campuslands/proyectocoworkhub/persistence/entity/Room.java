@@ -90,6 +90,14 @@ public class Room {
         return capacity;
     }
 
+    public Set<Equipment> getEquipments() {
+        return equipments;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
     public BigDecimal getHourlyRate() {
         return hourlyRate;
     }
@@ -103,5 +111,33 @@ public class Room {
     }
     public Location getLocation() {
         return location;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(RoomType type) {
+        this.type = type;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setHourlyRate(BigDecimal hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setEquipments(Set<Equipment> equipments) {
+        this.equipments = equipments;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }
