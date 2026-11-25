@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -19,10 +19,10 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-    // Crear reserva
+    // RF-04: Crear reserva
     @PostMapping
     public ResponseEntity<BookingResponseDTO> createBooking(
-           @Valid @RequestBody BookingRequestDTO dto) {
+            @Valid @RequestBody BookingRequestDTO dto) {
 
         BookingResponseDTO response =
                 bookingService.createBooking(dto);
@@ -31,7 +31,7 @@ public class BookingController {
                 .body(response);
     }
 
-    // Consultar reserva por ID
+    // RF-05: Consultar reserva por ID
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponseDTO> getBookingById(
             @PathVariable Long id) {
@@ -41,47 +41,26 @@ public class BookingController {
         );
     }
 
-    // Listar reservas
+    // RF-05: Listar y filtrar reservas
     @GetMapping
-    public ResponseEntity<List<BookingResponseDTO>> getAllBookings() {
+    public ResponseEntity<List<BookingResponseDTO>> getBookings(
+            @RequestParam(required = false) Long miembroId,
+            @RequestParam(required = false) Long salaId,
+            @RequestParam(required = false) LocalDate fecha,
+            @RequestParam(required = false) BookingStatus estado) {
 
         return ResponseEntity.ok(
-                bookingService.getAllBookings()
+                bookingService.getBookingsFiltered(
+                        miembroId,
+                        salaId,
+                        fecha,
+                        estado
+                )
         );
     }
 
-    // Consultar reservas de un miembro
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<BookingResponseDTO>> getBookingsByMember(
-            @PathVariable Long memberId) {
-
-        return ResponseEntity.ok(
-                bookingService.getBookingsByMember(memberId)
-        );
-    }
-
-    // Consultar reservas de una sala
-    @GetMapping("/room/{roomId}")
-    public ResponseEntity<List<BookingResponseDTO>> getBookingsByRoom(
-            @PathVariable Long roomId) {
-
-        return ResponseEntity.ok(
-                bookingService.getBookingsByRoom(roomId)
-        );
-    }
-
-    // Filtrar por estado
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<BookingResponseDTO>> getBookingsByStatus(
-            @PathVariable BookingStatus status) {
-
-        return ResponseEntity.ok(
-                bookingService.getBookingsByStatus(status)
-        );
-    }
-
-    // Cancelar reserva
-    @PatchMapping("/{id}/cancel")
+    // RF-08: Cancelar reserva
+    @PostMapping("/{id}/cancelar")
     public ResponseEntity<BookingResponseDTO> cancelBooking(
             @PathVariable Long id) {
 

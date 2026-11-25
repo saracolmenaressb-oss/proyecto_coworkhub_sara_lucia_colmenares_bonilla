@@ -7,7 +7,7 @@ import com.campuslands.proyectocoworkhub.presentation.dto.BookingItemRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.BookingRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.BookingResponseDTO;
 import com.campuslands.proyectocoworkhub.presentation.mapper.BookingMapper;
-
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
