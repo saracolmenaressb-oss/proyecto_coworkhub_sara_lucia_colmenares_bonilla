@@ -1,4 +1,7 @@
 package com.campuslands.proyectocoworkhub.presentation.dto;
 
-public class BookingItemRequestDTO {
+public record BookingItemRequestDTO (
+        Long additionalServiceId,
+        int quantity
+){
 }

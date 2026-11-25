@@ -86,6 +86,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     // Comprobar si una sala tiene reservas
     boolean existsByBookings_Id(Long roomId);
     //Esta consulta verifica si alguna sala tiene asociado el equipamiento.
-    boolean existsByEquipment_Id(Long equipmentId);
+    boolean existsByEquipments_Id(Long equipmentId);
 
 }

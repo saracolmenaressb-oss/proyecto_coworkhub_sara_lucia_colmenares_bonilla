@@ -31,6 +31,8 @@ public class Booking {
     private BigDecimal totalCost;
     @Column(name = "cancellation_fee", nullable = false, precision = 10, scale = 2)
     private BigDecimal cancellationFee;
+    @Column(name = "hours_returned", nullable = false)
+    private boolean hoursReturned = false;
 
     //0..* Booking -> 1 Room ("booked in")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -79,6 +81,10 @@ public class Booking {
 
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public boolean isHoursReturned() {
+        return hoursReturned;
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -161,4 +167,11 @@ public class Booking {
         return items;
     }
 
+    public void setHoursReturned(boolean hoursReturned) {
+        this.hoursReturned = hoursReturned;
+    }
+
+    public void setItems(List<BookingItem> items) {
+        this.items = items;
+    }
 }
