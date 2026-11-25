@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MembershipplanRepository extends JpaRepository<MembershipPlan, Long> {
+public interface MembershipPlanRepository extends JpaRepository<MembershipPlan, Long> {
     // Buscar un plan por nombre
     Optional<MembershipPlan> findByNameIgnoreCase(String name);
 

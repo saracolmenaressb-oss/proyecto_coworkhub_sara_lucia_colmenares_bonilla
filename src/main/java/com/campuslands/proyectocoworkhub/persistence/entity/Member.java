@@ -58,6 +58,30 @@ public class Member {
         this.email = email;
     }
 
+    public MembershipPlan getMembershipPlan() {
+        return membershipPlan;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setStatus(MemberStatus status) {
+        this.status = status;
+    }
+
+    public void setMembershipPlan(MembershipPlan membershipPlan) {
+        this.membershipPlan = membershipPlan;
+    }
+
     public void updateFullName(String fullName) {
         this.fullName = fullName;
     }

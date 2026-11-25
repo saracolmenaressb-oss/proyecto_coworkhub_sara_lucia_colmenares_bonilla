@@ -14,10 +14,8 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @CreationTimestamp
     @Column(name = "start_time", updatable = false)
     private LocalDateTime startTime;
-    @CreationTimestamp
     @Column(name = "end_time", updatable = false)
     private LocalDateTime endTime;
     @Column(nullable = false)
@@ -47,6 +45,9 @@ public class Booking {
     // 1 Booking -> 0..* BookingItem ("contains")
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingItem> items = new ArrayList<>();
+
+    public Booking() {
+    }
 
     public Booking(LocalDateTime startTime, LocalDateTime endTime, int attendees, BookingStatus status, BigDecimal roomCost, BigDecimal serviceCost, BigDecimal totalCost, BigDecimal cancellationFee, Room room, Member member) {
         this.startTime = startTime;

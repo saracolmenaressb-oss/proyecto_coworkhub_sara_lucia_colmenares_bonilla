@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     // Buscar reservas de un miembro
     List<Booking> findByMember_Id(Long memberId);
@@ -73,6 +74,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             @Param("monthStart") LocalDateTime monthStart,
             @Param("monthEnd") LocalDateTime monthEnd
     );
+    //No eliminar salas con reservas:
+    boolean existsByRoom_Id(Long roomId);
 
     // Comprobar si un miembro tiene reservas
     boolean existsByMember_Id(Long memberId);

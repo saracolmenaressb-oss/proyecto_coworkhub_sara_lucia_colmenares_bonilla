@@ -2,11 +2,13 @@ package com.campuslands.proyectocoworkhub.busisness.impl;
 
 import com.campuslands.proyectocoworkhub.busisness.service.RoomService;
 import com.campuslands.proyectocoworkhub.persistence.entity.*;
+import com.campuslands.proyectocoworkhub.persistence.repository.BookingRepository;
 import com.campuslands.proyectocoworkhub.persistence.repository.EquipmentRepository;
 import com.campuslands.proyectocoworkhub.persistence.repository.LocationRepository;
 import com.campuslands.proyectocoworkhub.persistence.repository.RoomRepository;
 import com.campuslands.proyectocoworkhub.presentation.dto.RoomRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.RoomResponseDTO;
+import com.campuslands.proyectocoworkhub.presentation.exception.ResourceInUseException;
 import com.campuslands.proyectocoworkhub.presentation.mapper.RoomMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,7 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final EquipmentRepository equipmentRepository;
     private final RoomMapper roomMapper;
+    private final BookingRepository bookingRepository;
     // 1. Registrar una sala
     @Override
     @Transactional
@@ -199,13 +202,15 @@ public class RoomServiceImpl implements RoomService {
 
         validateId(id);
 
-        Room room = findRoomById(id);
-
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("La sala no existe")
+                );
         boolean hasBookings =
                 roomRepository.existsByBookings_Id(id);
 
         if (hasBookings) {
-            throw new IllegalStateException(
+            throw new ResourceInUseException(
                     "No se puede eliminar la sala porque tiene reservas asociadas"
             );
         }

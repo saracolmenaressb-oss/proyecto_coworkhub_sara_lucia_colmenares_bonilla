@@ -90,10 +90,16 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void deleteLocation(Long id) {
 
-        Location location = findLocation(id);
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("La sede no existe")
+                );
 
-        if (roomRepository.existsByLocation_Id(id)) {
-            throw new IllegalStateException(
+        // RN-12: verificar si la sede tiene salas
+        boolean hasRooms = roomRepository.existsByLocation_Id(id);
+
+        if (hasRooms) {
+            throw new RuntimeException(
                     "No se puede eliminar la sede porque tiene salas asociadas"
             );
         }

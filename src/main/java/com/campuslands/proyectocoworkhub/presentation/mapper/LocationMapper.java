@@ -3,7 +3,9 @@ package com.campuslands.proyectocoworkhub.presentation.mapper;
 import com.campuslands.proyectocoworkhub.persistence.entity.Location;
 import com.campuslands.proyectocoworkhub.presentation.dto.LocationRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.LocationResponseDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LocationMapper {
     // Convertir RequestDTO en Entity
     public Location toEntity(LocationRequestDTO dto) {

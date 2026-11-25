@@ -20,7 +20,7 @@ public class MembershipPlan {
     @Column(name = "max_active_bookings", nullable = false)
     private int maxActiveBooking;
 
-    @OneToMany(mappedBy =  "membershipPlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy =  "membershipPlan")
     private List<Member> members = new ArrayList<>();
 
     protected MembershipPlan() {
@@ -64,5 +64,13 @@ public class MembershipPlan {
 
     public List<Member> getMembers() {
         return members;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 }

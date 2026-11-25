@@ -50,4 +50,8 @@ public class AdditionalService {
     public List<BookingItem> getBookingItems() {
         return bookingItems;
     }
+
+    public void setBookingItems(List<BookingItem> bookingItems) {
+        this.bookingItems = bookingItems;
+    }
 }
