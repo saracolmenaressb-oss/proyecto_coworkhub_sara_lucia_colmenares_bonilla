@@ -24,13 +24,13 @@ public class Booking {
     @Column(nullable = false, length = 20)
     private BookingStatus status;
     @Column(name = "room_cost", nullable = false, precision = 10, scale = 2)
-    private BigDecimal roomCost;
+    private BigDecimal roomCost = BigDecimal.ZERO;
     @Column(name = "services_cost", nullable = false, precision = 10, scale = 2)
-    private BigDecimal serviceCost;
+    private BigDecimal serviceCost = BigDecimal.ZERO;
     @Column(name = "total_cost", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalCost;
+    private BigDecimal totalCost = BigDecimal.ZERO;
     @Column(name = "cancellation_fee", nullable = false, precision = 10, scale = 2)
-    private BigDecimal cancellationFee;
+    private BigDecimal cancellationFee = BigDecimal.ZERO;
     @Column(name = "hours_returned", nullable = false)
     private boolean hoursReturned = false;
 

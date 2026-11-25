@@ -79,4 +79,28 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     // Comprobar si un miembro tiene reservas
     boolean existsByMember_Id(Long memberId);
+
+    @Query("""
+       SELECT b
+       FROM Booking b
+       WHERE (:memberId IS NULL OR b.member.id = :memberId)
+       AND (:roomId IS NULL OR b.room.id = :roomId)
+       AND (
+           :startOfDay IS NULL
+           OR (
+               b.startTime < :nextDay
+               AND b.endTime > :startOfDay
+           )
+       )
+       AND (:status IS NULL OR b.status = :status)
+       ORDER BY b.startTime ASC
+       """)
+    List<Booking> findFilteredBookings(
+            @Param("memberId") Long memberId,
+            @Param("roomId") Long roomId,
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("nextDay") LocalDateTime nextDay,
+            @Param("status") BookingStatus status
+    );
+
 }

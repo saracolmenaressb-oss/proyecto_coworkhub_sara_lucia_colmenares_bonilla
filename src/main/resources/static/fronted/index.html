@@ -1,0 +1,111 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoworkHub - Panel principal</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar" aria-label="Navegación principal">
+        <div>
+            <div class="sidebar-brand">
+                <span class="brand-badge">CoworkHub</span>
+                <h2>Espacios y Reservas</h2>
+            </div>
+
+            <nav aria-label="Secciones del sistema">
+                <ul class="nav-list">
+                    <li>
+                        <button type="button" class="nav-btn is-active" data-view="inicio">
+                            Inicio
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                                type="button"
+                                class="nav-btn"
+                                data-view="disponibilidad"
+                                data-roles="ADMIN,RECEPTIONIST,MEMBER"
+                        >
+                            Disponibilidad
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                                type="button"
+                                class="nav-btn"
+                                data-view="reservas"
+                                data-roles="ADMIN,RECEPTIONIST,MEMBER"
+                        >
+                            Reservas
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                                type="button"
+                                class="nav-btn"
+                                data-view="miembros"
+                                data-roles="ADMIN,RECEPTIONIST"
+                        >
+                            Miembros
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                                type="button"
+                                class="nav-btn"
+                                data-view="mi-consumo"
+                                data-roles="MEMBER"
+                        >
+                            Mi consumo mensual
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                                type="button"
+                                class="nav-btn"
+                                data-view="catalogos"
+                                data-roles="ADMIN,RECEPTIONIST"
+                        >
+                            Catálogos
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="session-box" aria-live="polite">
+            <div><strong>Usuario:</strong> <span id="session-usuario">-</span></div>
+            <span id="session-rol" class="session-role">SIN ROL</span>
+            <div><strong>Miembro ID:</strong> <span id="session-miembro-id">-</span></div>
+            <button id="logout-btn" type="button" class="btn-secondary" style="width: 100%; margin-top: 0.75rem;">
+                Cerrar sesión
+            </button>
+        </div>
+    </aside>
+
+    <div class="main-area">
+        <header class="topbar">
+            <h1 id="page-title">Panel principal</h1>
+            <span id="status-pill" class="brand-badge">Sesión activa</span>
+        </header>
+
+        <main class="content-container">
+            <div id="app-alert" class="alert alert-error is-hidden" role="alert"></div>
+
+            <section id="view-container" aria-label="Contenido de la vista activa">
+                <div class="welcome-panel">
+                    <h2>Bienvenido a CoworkHub</h2>
+                    <p id="welcome-summary">Cargando información de tu perfil...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script type="module" src="js/appPage.js"></script>
+</body>
+</html>

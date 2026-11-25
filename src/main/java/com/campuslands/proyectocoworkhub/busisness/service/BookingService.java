@@ -27,4 +27,14 @@ public interface BookingService {
 
     // Cancelar una reserva
     BookingResponseDTO cancelBooking(Long id);
+
+
+    List<BookingResponseDTO> getBookingsFiltered(
+            Long memberId,
+            Long roomId,
+            java.time.LocalDate date,
+            BookingStatus status
+    );
+
+
 }

@@ -4,6 +4,7 @@ import com.campuslands.proyectocoworkhub.busisness.service.BookingService;
 import com.campuslands.proyectocoworkhub.persistence.entity.BookingStatus;
 import com.campuslands.proyectocoworkhub.presentation.dto.BookingRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.BookingResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class BookingController {
     // Crear reserva
     @PostMapping
     public ResponseEntity<BookingResponseDTO> createBooking(
-            @RequestBody BookingRequestDTO dto) {
+           @Valid @RequestBody BookingRequestDTO dto) {
 
         BookingResponseDTO response =
                 bookingService.createBooking(dto);

@@ -1,0 +1,51 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoworkHub - Iniciar sesión</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="login-page">
+<main class="login-card" aria-labelledby="login-title">
+    <span class="brand-badge">CoworkHub</span>
+    <h1 id="login-title">Iniciar sesión</h1>
+    <p class="subtitle">Ingresa tus credenciales para acceder al sistema.</p>
+
+    <div id="login-alert" class="alert alert-error is-hidden" role="alert"></div>
+
+    <form id="login-form" novalidate>
+        <div class="form-group">
+            <label for="usuario">Usuario</label>
+            <input
+                    id="usuario"
+                    name="usuario"
+                    type="text"
+                    autocomplete="username"
+                    placeholder="Ej. admin_cowork"
+                    required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="contrasena">Contraseña</label>
+            <input
+                    id="contrasena"
+                    name="contrasena"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Tu contraseña"
+                    required
+            />
+        </div>
+
+        <button id="login-submit" type="submit" class="btn-primary">
+            Entrar
+        </button>
+    </form>
+</main>
+
+<script type="module" src="js/loginPage.js"></script>
+</body>
+</html>

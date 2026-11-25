@@ -83,7 +83,7 @@ public class BoockingServiceImpl implements BookingService {
         validateDuration(dto.startTime(), dto.endTime());
 
         // 7. Validar anticipación
-        if (!dto.startTime().isAfter(now.plusHours(1))) {
+        if (!dto.startTime().isBefore(now.plusHours(1))) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "La reserva debe realizarse con mínimo una hora de anticipación"
@@ -403,5 +403,62 @@ public class BoockingServiceImpl implements BookingService {
         Booking savedBooking = bookingRepository.save(booking);
 
         return bookingMapper.toResponseDTO(savedBooking);
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookingResponseDTO> getBookingsFiltered(
+            Long memberId,
+            Long roomId,
+            LocalDate date,
+            BookingStatus status) {
+
+        // La sala y la fecha deben enviarse juntas
+        if ((roomId == null && date != null) ||
+                (roomId != null && date == null)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Para filtrar por sala debes proporcionar salaId y fecha"
+            );
+        }
+
+        // Comprobar que el miembro exista
+        if (memberId != null &&
+                !memberRepository.existsById(memberId)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Miembro no encontrado"
+            );
+        }
+
+        // Comprobar que la sala exista
+        if (roomId != null &&
+                !roomRepository.existsById(roomId)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Sala no encontrada"
+            );
+        }
+
+        LocalDateTime startOfDay = null;
+        LocalDateTime nextDay = null;
+
+        if (date != null) {
+            startOfDay = date.atStartOfDay();
+            nextDay = date.plusDays(1).atStartOfDay();
+        }
+
+        return bookingRepository.findFilteredBookings(
+                        memberId,
+                        roomId,
+                        startOfDay,
+                        nextDay,
+                        status
+                )
+                .stream()
+                .map(bookingMapper::toResponseDTO)
+                .toList();
     }
 }
