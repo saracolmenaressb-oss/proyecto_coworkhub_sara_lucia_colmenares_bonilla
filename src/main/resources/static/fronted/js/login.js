@@ -1,32 +1,41 @@
-import { loginRequest, saveSession } from "./api/authApi.js";
+// js/login.js
+import { login } from "./api/authApi.js";
+import {
+    hasToken,
+    refreshSessionProfile,
+    saveSessionProfile,
+    saveToken,
+} from "./auth/session.js";
 
-const loginForm = document.getElementById("loginForm");
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const submitBtn = document.getElementById("submitBtn");
-const loginAlert = document.getElementById("loginAlert");
+const formEl = document.getElementById("login-form");
+const usernameEl = document.getElementById("username");
+const passwordEl = document.getElementById("password");
+const submitBtn = document.getElementById("login-submit");
+const alertEl = document.getElementById("login-alert");
 
-function showAlert(message, type = "error") {
-    loginAlert.textContent = message;
-    loginAlert.classList.remove("is-hidden", "alert-error", "alert-success");
-    loginAlert.classList.add(type === "success" ? "alert-success" : "alert-error");
+function showError(message) {
+    alertEl.textContent = message;
+    alertEl.classList.remove("is-hidden");
 }
 
-function hideAlert() {
-    loginAlert.textContent = "";
-    loginAlert.classList.add("is-hidden");
-    loginAlert.classList.remove("alert-error", "alert-success");
+function hideError() {
+    alertEl.textContent = "";
+    alertEl.classList.add("is-hidden");
 }
 
-loginForm.addEventListener("submit", async (event) => {
+if (hasToken()) {
+    window.location.href = "index.html";
+}
+
+formEl.addEventListener("submit", async (event) => {
     event.preventDefault();
-    hideAlert();
+    hideError();
 
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value;
+    const username = usernameEl.value.trim();
+    const password = passwordEl.value;
 
     if (!username || !password) {
-        showAlert("Por favor completa el usuario y la contraseña.", "error");
+        showError("Debes ingresar tu usuario y contraseña.");
         return;
     }
 
@@ -34,19 +43,28 @@ loginForm.addEventListener("submit", async (event) => {
     submitBtn.textContent = "Ingresando...";
 
     try {
-        const authResponse = await loginRequest({ username, password });
-        saveSession(authResponse);
+        const authData = await login(username, password);
+        if (!authData || !authData.token) {
+            throw new Error("El servidor no devolvió un token válido.");
+        }
 
-        showAlert(`¡Bienvenido, ${authResponse.username}! Redirigiendo...`, "success");
+        saveToken(authData.token);
 
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 600);
-    } catch (error) {
-        console.error("Error de autenticación:", error);
-        showAlert(error.message || "No fue posible iniciar sesión.", "error");
+        try {
+            await refreshSessionProfile();
+        } catch {
+            saveSessionProfile({
+                usuario: authData.username || username,
+                rol: authData.role || null,
+                miembroId: authData.memberId ?? authData.miembroId ?? null,
+            });
+        }
+
+        window.location.href = "index.html";
+    } catch (err) {
+        showError(err.message || "No fue posible iniciar sesión.");
     } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "Entrar";
+        submitBtn.textContent = "Ingresar";
     }
 });

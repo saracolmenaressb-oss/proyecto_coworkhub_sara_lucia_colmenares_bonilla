@@ -2,22 +2,21 @@
 import { apiRequest } from "./httpClient.js";
 
 /**
- * RF-11: Inicia sesión con usuario y contraseña y devuelve el JWT.
- * Si tu backend espera { username, password }, cambia las claves aquí.
+ * RF-11: Inicia sesión con usuario y contraseña y devuelve el JWT y datos de sesión.
  */
-export async function login(usuario, contrasena) {
+export async function login(username, password) {
     return apiRequest("/auth/login", {
         method: "POST",
         requiresAuth: false,
         body: {
-            usuario,
-            contrasena,
+            username,
+            password,
         },
     });
 }
 
 /**
- * RF-14: Devuelve los datos del usuario autenticado (usuario, rol y miembroId).
+ * RF-14: Devuelve los datos del usuario autenticado (username, role y miembroId si aplica).
  */
 export async function getPerfil() {
     return apiRequest("/auth/perfil", {

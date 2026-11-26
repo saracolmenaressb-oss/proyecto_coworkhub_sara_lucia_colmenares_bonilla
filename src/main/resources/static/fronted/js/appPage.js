@@ -6,6 +6,7 @@ import {
     logoutAndRedirect,
     refreshSessionProfile,
 } from "./auth/session.js";
+import { renderBookingsView } from "./views/bookingsView.js";
 
 const usuarioEl = document.getElementById("session-usuario");
 const rolEl = document.getElementById("session-rol");
@@ -20,6 +21,11 @@ const navButtons = document.querySelectorAll(".nav-btn[data-view]");
 function showAppError(message, codigo = "") {
     appAlertEl.textContent = codigo ? `${message} (${codigo})` : message;
     appAlertEl.classList.remove("is-hidden");
+}
+
+function hideAppError() {
+    appAlertEl.textContent = "";
+    appAlertEl.classList.add("is-hidden");
 }
 
 function renderProfile(profile) {
@@ -38,15 +44,37 @@ function setActiveNav(viewName) {
     });
 }
 
+function mountHomeView() {
+    pageTitleEl.textContent = "Panel principal";
+    setActiveNav("inicio");
+    hideAppError();
+    const profile = getSessionProfile();
+    viewContainerEl.innerHTML = `
+        <div class="welcome-panel">
+            <h2>Bienvenido a CoworkHub</h2>
+            <p id="welcome-summary">
+                ${
+        profile
+            ? `Has iniciado sesión como "${profile.usuario}" con rol ${profile.rol}${
+                profile.miembroId ? ` (Miembro #${profile.miembroId}).` : "."
+            }`
+            : "Cargando información de tu perfil..."
+    }
+            </p>
+        </div>
+    `;
+}
+
 function mountPlaceholderView(viewName, label) {
     pageTitleEl.textContent = label;
     setActiveNav(viewName);
+    hideAppError();
     viewContainerEl.innerHTML = `
-    <div class="welcome-panel">
-      <h2>${label}</h2>
-      <p>Contenedor listo para montar la vista de <strong>${viewName}</strong>.</p>
-    </div>
-  `;
+        <div class="welcome-panel">
+            <h2>${label}</h2>
+            <p>Contenedor listo para montar la vista de <strong>${viewName}</strong>.</p>
+        </div>
+    `;
 }
 
 async function initApp() {
@@ -79,7 +107,17 @@ async function initApp() {
         btn.addEventListener("click", () => {
             const viewName = btn.getAttribute("data-view");
             const label = btn.textContent.trim();
-            mountPlaceholderView(viewName, label);
+
+            if (viewName === "inicio") {
+                mountHomeView();
+            } else if (viewName === "reservas") {
+                pageTitleEl.textContent = label;
+                setActiveNav(viewName);
+                hideAppError();
+                renderBookingsView(viewContainerEl, showAppError);
+            } else {
+                mountPlaceholderView(viewName, label);
+            }
         });
     });
 }
