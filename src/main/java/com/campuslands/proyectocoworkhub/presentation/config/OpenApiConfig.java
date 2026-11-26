@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
     @Bean
     public OpenAPI coworkHubOpenAPI() {
-
         return new OpenAPI()
                 .info(new Info()
                         .title("CoWorkHub API")
@@ -41,6 +40,7 @@ public class OpenApiConfig {
                         )
                 );
     }
+
     @Bean
     public GroupedOpenApi authGroup() {
         return GroupedOpenApi.builder()
@@ -48,6 +48,7 @@ public class OpenApiConfig {
                 .pathsToMatch("/auth/**")
                 .build();
     }
+
     @Bean
     public GroupedOpenApi bookingsGroup() {
         return GroupedOpenApi.builder()
@@ -63,6 +64,7 @@ public class OpenApiConfig {
                 .pathsToMatch("/api/members/**")
                 .build();
     }
+
     @Bean
     public GroupedOpenApi generalGroup() {
         return GroupedOpenApi.builder()
