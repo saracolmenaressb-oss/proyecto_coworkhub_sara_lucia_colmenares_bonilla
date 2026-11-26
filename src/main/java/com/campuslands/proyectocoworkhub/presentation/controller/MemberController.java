@@ -5,6 +5,7 @@ import com.campuslands.proyectocoworkhub.persistence.entity.MemberStatus;
 import com.campuslands.proyectocoworkhub.presentation.dto.MemberRegistrationRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.MemberRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.MemberResponseDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,8 @@ import java.util.List;
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Validated
-@PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
+//@PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
+@SecurityRequirement(name = "bearerAuth")
 public class MemberController {
     private final MemberService memberService;
 

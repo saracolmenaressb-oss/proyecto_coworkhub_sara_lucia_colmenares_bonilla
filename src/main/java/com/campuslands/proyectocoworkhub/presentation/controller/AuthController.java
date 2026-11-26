@@ -4,6 +4,7 @@ import com.campuslands.proyectocoworkhub.busisness.service.AuthService;
 import com.campuslands.proyectocoworkhub.presentation.dto.AuthProfileDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.AuthRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.AuthResponseDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class AuthController {
     private final AuthService authService;
 

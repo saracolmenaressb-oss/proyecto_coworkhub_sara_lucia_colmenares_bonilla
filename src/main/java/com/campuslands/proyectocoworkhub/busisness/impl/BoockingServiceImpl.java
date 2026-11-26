@@ -31,13 +31,38 @@ public class BoockingServiceImpl implements BookingService {
     private final MemberRepository memberRepository;
     private final AdditionalServiceRepository additionalServiceRepository;
     private final BookingMapper bookingMapper;
+    private final UserAccountRepository userAccountRepository;
 
     private static final List<BookingStatus> ACTIVE_STATUSES =
             List.of(BookingStatus.PENDING, BookingStatus.CONFIRMED);
 
+    private UserAccount obtenerCuentaAutenticada(String username) {
+        return userAccountRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "No se encontró la cuenta del usuario autenticado"
+                ));
+    }
+    private void validarPropiedadReserva(
+            Booking booking,
+            UserAccount account
+    ) {
+        if (account.getRole() == Role.MEMBER) {
+
+            if (account.getMember() == null ||
+                    !booking.getMember().getId()
+                            .equals(account.getMember().getId())) {
+
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "No tienes permiso para acceder a esta reserva"
+                );
+            }
+        }
+    }
     // CREAR RESERVA
     @Override
-    public BookingResponseDTO createBooking(BookingRequestDTO dto) {
+    public BookingResponseDTO createBooking(BookingRequestDTO dto, String username) {
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -48,10 +73,27 @@ public class BoockingServiceImpl implements BookingService {
                 ));
 
         // 2. Buscar el miembro
-        Member member = memberRepository.findById(dto.memberId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "El miembro no existe"
-                ));
+        UserAccount account = obtenerCuentaAutenticada(username);
+
+        Member member;
+
+        if (account.getRole() == Role.MEMBER) {
+
+            member = account.getMember();
+
+            if (member == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "La cuenta no tiene un miembro asociado"
+                );
+            }
+        } else {
+            member = memberRepository.findById(dto.memberId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "El miembro no existe"
+                    ));
+        }
 
         // 3. Validar estado del miembro
         if (member.getStatus() != MemberStatus.ACTIVE) {
@@ -83,13 +125,12 @@ public class BoockingServiceImpl implements BookingService {
         validateDuration(dto.startTime(), dto.endTime());
 
         // 7. Validar anticipación
-        if (!dto.startTime().isBefore(now.plusHours(1))) {
+        if (dto.startTime().isBefore(now.plusHours(1))) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "La reserva debe realizarse con mínimo una hora de anticipación"
             );
         }
-
         // 8. Validar horario de la sede
         validateLocationSchedule(room, dto.startTime(), dto.endTime());
 
@@ -266,13 +307,17 @@ public class BoockingServiceImpl implements BookingService {
     // CONSULTAR POR ID
     @Override
     @Transactional(readOnly = true)
-    public BookingResponseDTO getBookingById(Long id) {
+    public BookingResponseDTO getBookingById(Long id, String username) {
+
+        UserAccount account = obtenerCuentaAutenticada(username);
 
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Reserva no encontrada"
                 ));
+
+        validarPropiedadReserva(booking, account);
 
         return bookingMapper.toResponseDTO(booking);
     }
@@ -338,7 +383,7 @@ public class BoockingServiceImpl implements BookingService {
 
     // CANCELAR RESERVA
     @Override
-    public BookingResponseDTO cancelBooking(Long id) {
+    public BookingResponseDTO cancelBooking(Long id, String username) {
 
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -410,8 +455,31 @@ public class BoockingServiceImpl implements BookingService {
             Long memberId,
             Long roomId,
             LocalDate date,
-            BookingStatus status) {
+            BookingStatus status,
+            String username
+    ) {
+        UserAccount account = obtenerCuentaAutenticada(username);
 
+        if (account.getRole() == Role.MEMBER) {
+
+            if (account.getMember() == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "La cuenta no tiene un miembro asociado"
+                );
+            }
+
+            Long ownMemberId = account.getMember().getId();
+
+            if (memberId != null && !memberId.equals(ownMemberId)) {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "No puedes consultar las reservas de otro miembro"
+                );
+            }
+
+            memberId = ownMemberId;
+        }
         // La sala y la fecha deben enviarse juntas
         if ((roomId == null && date != null) ||
                 (roomId != null && date == null)) {
