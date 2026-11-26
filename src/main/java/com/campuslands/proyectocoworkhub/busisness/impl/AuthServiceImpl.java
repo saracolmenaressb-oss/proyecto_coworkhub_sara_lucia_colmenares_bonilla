@@ -9,6 +9,7 @@ import com.campuslands.proyectocoworkhub.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 @Service
@@ -34,9 +35,11 @@ public class AuthServiceImpl implements AuthService {
         // 2. Buscar la cuenta autenticada.
         UserAccount account = userAccountRepository
                 .findByUsername(dto.username())
-                .orElseThrow();
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "No existe una cuenta con ese usuario"
+                ));
 
-        // 3. Generar el token.
+        // 3. Generar el token JWT.
         String token = jwtService.generateToken(
                 account.getUsername(),
                 account.getRole().name()
@@ -46,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         return new AuthResponseDTO(
                 token,
                 "Bearer",
-                3600000,
+                expirationMs,
                 account.getUsername(),
                 account.getRole().name()
         );

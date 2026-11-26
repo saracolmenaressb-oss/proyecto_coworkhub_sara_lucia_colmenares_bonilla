@@ -7,6 +7,8 @@ public record MemberRequestDTO (
         String fullName,
         String email,
         MemberStatus status,
-        Long membershipPlanId
+        Long membershipPlanId,
+        String username,
+        String password
 ){
 }

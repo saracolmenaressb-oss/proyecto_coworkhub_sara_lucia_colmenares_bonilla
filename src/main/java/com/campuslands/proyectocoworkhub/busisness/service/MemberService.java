@@ -1,6 +1,7 @@
 package com.campuslands.proyectocoworkhub.busisness.service;
 
 import com.campuslands.proyectocoworkhub.persistence.entity.MemberStatus;
+import com.campuslands.proyectocoworkhub.presentation.dto.MemberRegistrationRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.MemberRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.MemberResponseDTO;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface MemberService {
     // Registrar un miembro
-    MemberResponseDTO registrar(MemberRequestDTO dto);
+    MemberResponseDTO registrar(MemberRegistrationRequestDTO dto);
 
     // Buscar miembro por ID
     MemberResponseDTO buscarPorId(Long id);

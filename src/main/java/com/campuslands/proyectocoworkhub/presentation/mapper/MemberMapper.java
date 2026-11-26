@@ -1,6 +1,7 @@
 package com.campuslands.proyectocoworkhub.presentation.mapper;
 
 import com.campuslands.proyectocoworkhub.persistence.entity.Member;
+import com.campuslands.proyectocoworkhub.presentation.dto.MemberRegistrationRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.MemberRequestDTO;
 import com.campuslands.proyectocoworkhub.presentation.dto.MemberResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,16 @@ public class MemberMapper {
                 member.getStatus(),
                 member.getMembershipPlan().getId(),
                 member.getMembershipPlan().getName()
+        );
+    }
+    // Convertir DTO de registro a Entity
+    public Member toEntity(MemberRegistrationRequestDTO dto) {
+
+        return new Member(
+                dto.documentNumber(),
+                dto.fullName(),
+                dto.email(),
+                dto.status()
         );
     }
 }
